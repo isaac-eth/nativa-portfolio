@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>if (location.hash === '#agentes') { history.replaceState(null, '', window.location.pathname); }</script>
+    <meta name="format-detection" content="telephone=no">
+    <title>Nativa | Agentes de IA y Desarrollo Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0d0d0d;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #2c2c2e;
+            --accent: #ffc100;
+            --accent-light: #fff8e0;
+            --accent-glow: rgba(255, 193, 0, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #71717a;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --slate: #2C2C2E;
+            --gold-light: #fff8e0;
+            --gold-mid: #ffc100;
+            --gold-dark: #cc9900;
+        }
+
+        /* Golden metallic text effect */
+        .metallic-text {
+            background: linear-gradient(180deg, #ffffff 0%, #ffe066 30%, #ffc100 50%, #cc9900 70%, #ffffff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: brightness(1.15) saturate(1.2);
+        }
+
+        .metallic-accent {
+            background: linear-gradient(135deg, #ffc100 0%, #fff8e0 50%, #ffc100 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Contrast text - bold + accent */
+        .contrast-text {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* LIGHT ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 193, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 193, 0, 0.5); }
+        }
+
+        /* Scroll reveal - light version */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Background grid - golden tint */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 193, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 193, 0, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: padding 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 12px 0;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Mobile menu button */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 101;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo img {
+            height: 32px;
+            width: auto;
+        }
+
+        .nav-logo span {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* PROMO BANNER */
+        .promo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--accent), var(--gold-dark));
+            color: #000;
+            text-align: center;
+            padding: 12px 20px;
+            z-index: 1000;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .promo-banner.visible {
+            display: block;
+        }
+
+        .promo-banner span {
+            margin-right: 12px;
+        }
+
+        .promo-banner .timer {
+            background: #000;
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        body.promo-visible {
+            padding-top: 50px;
+        }
+
+        body.promo-visible nav {
+            top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .promo-banner {
+                font-size: 0.8rem;
+                padding: 10px 16px;
+            }
+
+            .promo-banner .timer {
+                display: block;
+                margin-top: 6px;
+            }
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: #000 !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+        }
+
+        .hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .hero-content {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .profile-card {
+            animation: slideInRight 0.8s ease forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 193, 0, 0.1);
+            border: 1px solid rgba(255, 193, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .hero-tag .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--accent), #fff8e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .hero-bio {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #000;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .hero-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .contact-item svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        /* Profile card */
+        .profile-card {
+            position: relative;
+        }
+
+        .profile-card:hover {
+            transform: scale(1.02);
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        .profile-img-wrapper {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .profile-img-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(10,10,15,0.5));
+            pointer-events: none;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .profile-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2;
+        }
+
+        .profile-badge-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .profile-badge-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #000;
+        }
+
+        .profile-badge-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .profile-badge-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* SECTION */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin-bottom: 48px;
+        }
+
+        /* PRODUCTS */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--gold-light));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .product-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 193, 0, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .product-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--accent);
+        }
+
+        .product-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .product-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* AGENTS */
+        .agents-section {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .agents-visual {
+            position: relative;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        #networkCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .agents-visual .profile-img {
+            height: 400px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .agent-float {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+            animation: float 4s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .agent-float:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 193, 0, 0.2);
+        }
+
+        .agent-float:nth-child(2) {
+            top: 30px;
+            right: -30px;
+            animation-delay: 0.5s;
+        }
+
+        .agent-float:nth-child(3) {
+            bottom: 40px;
+            left: -30px;
+            animation-delay: 1s;
+        }
+
+        .agent-float:nth-child(4) {
+            bottom: 100px;
+            right: -20px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .agent-float-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 193, 0, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .agent-float-icon svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+
+        .agent-float-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .agent-float-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .agents-content h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .agents-content h2 span {
+            background: linear-gradient(135deg, var(--accent), #fff8e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .agents-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .agents-bullets {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .agents-bullets li {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .agents-bullets li::before {
+            content: '•';
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+            transform: translateX(8px);
+        }
+
+        .task-check {
+            width: 22px;
+            height: 22px;
+            background: rgba(255, 193, 0, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .task-check svg {
+            width: 12px;
+            height: 12px;
+            color: var(--accent);
+        }
+
+        .task-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* PLATFORMS */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .platform-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .platform-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+        }
+
+        .platform-card .product-icon {
+            margin-bottom: 20px;
+        }
+
+        .platform-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .platform-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* PRICING */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            background: linear-gradient(180deg, rgba(255, 193, 0, 0.05) 0%, var(--bg-card) 100%);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: #000;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-badge.featured-badge {
+            background: linear-gradient(135deg, var(--accent), var(--gold-light));
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .pricing-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 12px 0 8px;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .pricing-price {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .price-old {
+            color: var(--text-muted);
+            text-decoration: line-through;
+            font-size: 1.1rem;
+        }
+
+        .price-old-sm {
+            color: var(--text-muted);
+            text-decoration: line-through;
+            font-size: 0.85rem;
+        }
+
+        .price-new {
+            color: var(--accent);
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .price-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .price-note {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .pricing-features {
+            margin-bottom: 24px;
+        }
+
+        .pricing-features ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pricing-features li {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .check {
+            color: var(--accent);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .pricing-setup {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-setup p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .pricing-setup strong {
+            color: var(--accent);
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            padding: 14px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .pricing-cta:hover {
+            background: var(--accent);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .pricing-cta.featured-cta {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .pricing-cta.featured-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .pricing-footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .pricing-footer .accent {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* FAQ */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .faq-item h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .modal-header h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .modal-close {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .modal-body {
+            padding: 28px;
+        }
+
+        .service-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .service-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .service-item h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .service-item h4 span {
+            color: var(--accent);
+        }
+
+        .service-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .modal-plan-title {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 48px auto 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .pricing-card {
+                padding: 28px;
+            }
+        }
+
+        .pricing-info-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: transparent;
+            color: var(--accent);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid var(--accent);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .pricing-info-btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+        }
+
+        .cta-section h2 span {
+            background: linear-gradient(135deg, var(--accent), #fff8e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-bio {
+                margin: 0 auto 40px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-contact {
+                align-items: center;
+            }
+
+            .profile-card {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .agents-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .agents-visual {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 320px;
+                height: 100vh;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 32px;
+                transition: right 0.3s ease;
+                border-left: 1px solid var(--border);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero {
+                padding: 100px 0 60px;
+            }
+
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .profile-img {
+                height: 380px;
+            }
+
+            .product-card {
+                padding: 28px;
+            }
+
+            .platform-card {
+                padding: 28px;
+            }
+
+            .agents-visual .agent-float {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-tag {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .hero-buttons a {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-buttons a {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .profile-img {
+                height: 320px;
+            }
+
+            .profile-badge {
+                padding: 10px 14px;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PROMO BANNER -->
+    <div class="promo-banner" id="promoBanner">
+        <span>🔥 Plan Starter en $5,800 + 50% en implementación</span>
+        <span>⏱️ Termina en: <span class="timer" id="promoTimer">20d 00h 00m 00s</span></span>
+    </div>
+
+    <div class="bg-grid"></div>
+
+    <!-- NAV -->
+    <nav>
+        <div class="container">
+            <div class="nav-logo">
+                <img src="Nativa_Isotipo.svg" alt="Nativa">
+                <span>Nativa</span>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#agentes">Agentes IA</a></li>
+                <li><a href="#plataformas">Plataformas</a></li>
+                <li><a href="#precios">Precios</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contacto" class="nav-cta">Contactar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                    <canvas id="heroCanvas" class="hero-canvas"></canvas>
+                <div class="hero-content">
+                    <div class="hero-tag">
+                        <div class="dot"></div>
+                        Disponible
+                    </div>
+                    <h1 class="metallic-accent">Nativa</h1>
+                    <p class="hero-subtitle">Agentes de <span class="contrast-text">Inteligencia Artificial</span> y <span class="contrast-text">Desarrollo Web</span></p>
+                    <p class="hero-bio">Construimos agentes de IA que trabajan 24/7 para tu negocio y desarrollamos plataformas web que transforman la manera en que operas.</p>
+                    <div class="hero-buttons">
+                        <a href="mailto:contacto@nativa.mx" class="btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            Envíanos un email
+                        </a>
+                        <a href="#agentes" class="btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                            Conoce más
+                        </a>
+                    </div>
+                    <div class="hero-contact">
+                        <div class="contact-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            contacto@nativa.mx
+                        </div>
+                        <div class="contact-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            <span style="color: var(--accent); font-weight: 600;">+52 444 460 2173</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-img-wrapper">
+                        <img src="Nativa_Logotipo.svg" alt="Nativa" class="profile-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+        <div class="container">
+            <p class="section-label">Lo que hacemos</p>
+            <h2 class="metallic-accent">Soluciones tecnológicas a tu medida</h2>
+            <p class="section-desc">Combinamos inteligencia artificial y desarrollo web para crear herramientas que transforman la manera en que trabajas.</p>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10"></path><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    </div>
+                    <h3>Agentes de IA</h3>
+                    <p>Asistentes digitales autónomos capaces de ver, analizar, crear y actualizar cualquier base de datos. Tu nuevo miembro del equipo trabaja 24/7 sin descanso.</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <h3>Páginas Web</h3>
+                    <p>Sitios web intuitivos, con diseño de alta calidad. Interfaces modernas, rápidas y optimizadas para tu negocio.</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                    </div>
+                    <h3>Plataformas de Gestión</h3>
+                    <p>Sistemas a medida para administrar tu negocio. Dashboards inteligentes, control de inventario, gestión de clientes y automatización de procesos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AGENTES IA -->
+    <section id="agentes" class="agents-section">
+        <div class="container">
+            <div class="agents-grid">
+                <div class="agents-visual">
+                    <canvas id="networkCanvas"></canvas>
+                </div>
+                <div class="agents-content">
+                    <p class="section-label">Producto principal</p>
+                    <h2 class="metallic-accent">Agentes de <span class="metallic-text">Inteligencia Artificial</span></h2>
+                    <p class="agents-desc">El nuevo integrante estrella de tu equipo: disponible <span class="contrast-text">24/7</span>, impulsado por <span class="contrast-text">IA avanzada</span>, automatiza flujos, procesa datos en tiempo real y ejecuta tareas.</p>
+
+                    <p class="agents-desc">Más que una herramienta, es una <span class="contrast-text">capa de inteligencia</span> que escala tu operación y dispara tu productividad.</p>
+                    <div class="tasks-list">
+                        <div class="task-item">
+                            <div class="task-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p>Se integra fácilmente con tus sistemas (CRM, ERP, APIs).</p>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p>Automatiza tareas y ejecuta en tiempo real.</p>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p>Atiende clientes por WhatsApp con respuestas y contexto del cliente.</p>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p>Genera dashboards interactivos para ayudarte a tomar mejores decisiones.</p>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p>Aprende progresivamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLATAFORMAS -->
+    <section id="plataformas">
+        <div class="container">
+            <p class="section-label">También desarrollamos</p>
+            <h2 class="metallic-accent">Plataformas y Aplicaciones</h2>
+            <p class="section-desc">Soluciones tecnológicas completas para digitalizar y optimizar la gestión de tu negocio.</p>
+            <div class="platforms-grid">
+                <div class="platform-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                    <h3><span class="contrast-text">CRM</span> y Gestión de Clientes</h3>
+                    <p>Administra tus clientes, lleva control de interacciones, historial de compras y preferencias. Automatiza seguimientos y nunca pierdas una oportunidad de negocio.</p>
+                </div>
+                <div class="platform-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <h3>Sistemas de gestión de calidad para <span class="contrast-text">IATF 16949</span> & <span class="contrast-text">ISO 9001</span></h3>
+                    <p>Sistemas especializados para la industria automotriz. Cumplimiento normativo, control documental y auditoría en tiempo real.</p>
+                </div>
+                <div class="platform-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                    </div>
+                    <h3><span class="contrast-text">Automatizaciones</span> Digitales</h3>
+                    <p>Conecta tus sistemas y automatiza flujos de trabajo repetitive. Integración con APIs, webhooks y procesos automatizados que ejecutan tareas sin intervención manual.</p>
+                </div>
+                <div class="platform-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <h3>Control <span class="contrast-text">Financiero</span></h3>
+                    <p>Dashboards con métricas financieras en tiempo real. Control de ingresos, gastos, avances presupuestales y proyecciones inteligentes.</p>
+                </div>
+                <div class="platform-card">
+                    <div class="product-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    </div>
+                    <h3><span class="contrast-text">Aplicaciones Web</span> a Medida</h3>
+                    <p>¿Necesitas algo específico? Desarrollo aplicaciones web personalizadas que se adaptan exactamente a los procesos y necesidades de tu empresa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRECIOS -->
+    <section id="precios">
+        <div class="container">
+            <p class="section-label">Planes</p>
+            <h2 class="metallic-accent">Invierte en tu crecimiento</h2>
+            <p class="section-desc">Precios claros, sin sorpresas. Elige el plan que mejor se adapte a tu negocio.</p>
+            
+            <div class="pricing-grid">
+                <!-- STARTER -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-badge">Promoción</div>
+                        <h3 class="pricing-title">Starter</h3>
+                        <p class="pricing-desc">Ideal para emprendedores que inician con IA</p>
+                        <div class="pricing-price">
+                            <span class="price-old">$8,900</span>
+                            <span class="price-new">Desde $5,800</span>
+                            <span class="price-period">/mes</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><span class="check">✓</span> Agente con habilidades esenciales</li>
+                            <li><span class="check">✓</span> CRM básico + Dashboard</li>
+                            <li><span class="check">✓</span> Integración WhatsApp + Calendario</li>
+                            <li><span class="check">✓</span> Catálogo de productos/servicios</li>
+                            <li><span class="check">✓</span> Crear cotizaciones automáticas</li>
+                            <li><span class="check">✓</span> Recordatorios (tú y clientes)</li>
+                            <li><span class="check">✓</span> Guía de optimización (manual)</li>
+                            <li><span class="check">✓</span> Videoclases de uso</li>
+                            <li><span class="check">✓</span> Capacitación inicial</li>
+                            <li><span class="check">✓</span> 1 usuario</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-setup">
+                        <p>Implementación: <span class="price-old-sm">$10,000</span> <strong>$5,000</strong></p>
+                    </div>
+                    <a href="mailto:contacto@nativa.mx?subject=Quiero%20Starter%20Nativa" class="pricing-cta">Comenzar</a>
+                    <button onclick="openModal('starter')" class="pricing-info-btn">Más información</button>
+                </div>
+
+                <!-- PROFESIONAL -->
+                <div class="pricing-card featured">
+                    <div class="pricing-badge featured-badge">Más popular</div>
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Profesional</h3>
+                        <p class="pricing-desc">Para pymes que necesitan escalar ventas</p>
+                        <div class="pricing-price">
+                            <span class="price-new">Desde $13,900</span>
+                            <span class="price-period">/mes</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><span class="check">✓</span> Todo lo de Starter</li>
+                            <li><span class="check">✓</span> Pipeline de cotizaciones visual</li>
+                            <li><span class="check">✓</span> Integraciones externas (CRM, Email, SMS)</li>
+                            <li><span class="check">✓</span> Migración de datos incluida</li>
+                            <li><span class="check">✓</span> Automatizaciones (follow-ups, secuencias)</li>
+                            <li><span class="check">✓</span> Reportes avanzados de ventas</li>
+                            <li><span class="check">✓</span> 3 usuarios</li>
+                            <li><span class="check">✓</span> Guía + Videoclases + Capacitación</li>
+                            <li><span class="check">✓</span> Prioridad en soporte</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-setup">
+                        <p>Implementación: <span class="price-old-sm">$10,000</span> <strong>$5,000</strong></p>
+                    </div>
+                    <a href="mailto:contacto@nativa.mx?subject=Quiero%20Profesional%20Nativa" class="pricing-cta featured-cta">Comenzar</a>
+                    <button onclick="openModal('profesional')" class="pricing-info-btn">Más información</button>
+                </div>
+
+                <!-- ENTERPRISE -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Enterprise</h3>
+                        <p class="pricing-desc">Para empresas que necesitan agentes múltiples</p>
+                        <div class="pricing-price">
+                            <span class="price-new">Desde $29,000</span>
+                            <span class="price-period">/mes</span>
+                        </div>
+                        <p class="price-note">* El precio varía según número de agentes y complejidad</p>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><span class="check">✓</span> Todo lo de Profesional</li>
+                            <li><span class="check">✓</span> Multiagentes especializados</li>
+                            <li><span class="check">✓</span> White-label (tu marca)</li>
+                            <li><span class="check">✓</span> Migración de datos incluida</li>
+                            <li><span class="check">✓</span> Desarrollo de habilidades custom</li>
+                            <li><span class="check">✓</span> Acceso prioritario a nuevas funciones</li>
+                            <li><span class="check">✓</span> Usuarios ilimitados</li>
+                            <li><span class="check">✓</span> Dashboards multi-sucursal</li>
+                            <li><span class="check">✓</span> Soporte dedicado + SLA</li>
+                            <li><span class="check">✓</span> Capacitación in-site</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-setup">
+                        <p>Implementación: <span class="price-old-sm">$10,000</span> <strong>$5,000</strong></p>
+                    </div>
+                    <a href="mailto:contacto@nativa.mx?subject=Quiero%20Enterprise%20Nativa" class="pricing-cta">Contactar</a>
+                    <button onclick="openModal('enterprise')" class="pricing-info-btn">Más información</button>
+                </div>
+            </div>
+
+            <div class="pricing-footer">
+                <p><span class="accent">✓</span> Entrega en 10 días hábiles <span class="accent">✓</span> Capacitación incluida <span class="accent">✓</span> Soporte dedicado</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="container">
+            <p class="section-label">FAQ</p>
+            <h2 class="metallic-accent">Preguntas frecuentes</h2>
+            <p class="section-desc">Resolvemos tus dudas para que tomes la mejor decisión.</p>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>¿Qué es un agente de IA?</h3>
+                    <p>Es un asistente digital autónomo que trabaja 24/7 para tu negocio. Puede leer documentos, conversar por WhatsApp, agendar citas, crear cotizaciones, hacer seguimiento a clientes y mucho más. Es como tener un empleado virtual que nunca descansa.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Necesito conocimientos técnicos?</h3>
+                    <p>No. Tu agente viene listo para usar. Te proporcionamos la guía, videoclases y capacitación inicial para que puedas operarlo sin conocimientos técnicos. Si puedes usar WhatsApp, puedes usar tu agente.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Cuánto tiempo toma implementar un agente?</h3>
+                    <p>El proceso estándar es de 10 días hábiles. Durante ese tiempo configuramos tu catálogo de productos/servicios, entrenamos al agente con tu información, configuramos integraciones y te capacitamos para que estés listo desde el día uno.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Qué incluye la implementación?</h3>
+                    <p>La implementación incluye: configuración del agente con tu información, carga de tu catálogo de productos/servicios, integraciones básicas (WhatsApp, Calendario), capacitación inicial y acceso a la plataforma. Todo listo para que empieces a vender.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Puedo cambiar de plan después?</h3>
+                    <p>Sí. Puedes hacer upgrade a un plan superior en cualquier momento. El proceso es sencillo y no pierdes ninguna configuración. Solo contactanos y te ayudamos con la transición.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Qué pasa si no estoy satisfecho?</h3>
+                    <p>Durante los primeros 30 días tienes garantía de satisfacción. Si el agente no cumple tus expectativas, trabajaremos para ajustarlo hasta que esté correcto. Tu satisfacción es nuestra prioridad.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿El precio es mensual o anual?</h3>
+                    <p>Los precios mostrados son mensuales. Sin embargo, si prefieres pagar annually obtienes 2 meses gratis. Para Enterprise, tenemos descuentos por volumen que varían según el proyecto.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Puedo integrar mi CRM actual?</h3>
+                    <p>En el plan Profesional y superiores puedes integrar tu CRM actual (HubSpot, Pipedrive, Salesforce) así como Gmail, Outlook, Mailchimp y más. En Enterprise también desarrollamos integraciones custom.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contacto" class="cta-section">
+        <div class="container">
+            <h2>¿Listo para <span class="metallic-text">transformar</span> tu negocio?</h2>
+            <p>Hablemos de tu proyecto y descubramos cómo la IA y el desarrollo web pueden llevar tu empresa al siguiente nivel.</p>
+            <div class="cta-buttons">
+                <a href="mailto:contacto@nativa.mx" class="btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    Enviar email
+                </a>
+                <a href="tel:+524444602173" class="btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    Llamar ahora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>© 2026 Nativa · Agentes de IA y Desarrollo Web · <a href="mailto:contacto@nativa.mx">contacto@nativa.mx</a></p>
+        </div>
+    </footer>
+
+    <!-- LIGHT ANIMATION SCRIPTS -->
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Nav scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Promo banner timer (20 days from now)
+        const promoEndDate = new Date();
+        promoEndDate.setDate(promoEndDate.getDate() + 20);
+        
+        function updatePromoTimer() {
+            const now = new Date();
+            const diff = promoEndDate - now;
+            
+            if (diff <= 0) {
+                document.getElementById('promoTimer').textContent = '¡Terminó!';
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('promoTimer').textContent = 
+                `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+        }
+        
+        updatePromoTimer();
+        setInterval(updatePromoTimer, 1000);
+        
+        // Show promo banner after scrolling past hero
+        const heroSection = document.querySelector('.hero');
+        const promoBanner = document.getElementById('promoBanner');
+        
+        const promoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting && window.scrollY > 100) {
+                    promoBanner.classList.add('visible');
+                    document.body.classList.add('promo-visible');
+                } else if (entry.isIntersecting) {
+                    promoBanner.classList.remove('visible');
+                    document.body.classList.remove('promo-visible');
+                }
+            });
+        }, { threshold: 0 });
+        
+        if (heroSection) {
+            promoObserver.observe(heroSection);
+        }
+        
+        // Also show after scrolling 200px
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 200) {
+                promoBanner.classList.add('visible');
+                document.body.classList.add('promo-visible');
+            }
+        });
+
+        // Scroll reveal (lightweight - no library)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Add reveal classes to elements
+        document.querySelectorAll('.section-label, .section-title, .section-desc, .product-card, .platform-card, .task-item, .agents-content').forEach((el, index) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${index * 0.05}s`;
+            observer.observe(el);
+        });
+
+    </script>
+    <script>
+        // Network animation for agents section - Golden theme
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let particles = [];
+        let animationId;
+        let initialized = false;
+
+        function resizeCanvas() {
+            if (!canvas || !canvas.parentElement) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width || 400;
+            canvas.height = rect.height || 400;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * (canvas?.width || 400);
+                this.y = Math.random() * (canvas?.height || 400);
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 4 + 3;
+            }
+
+            draw() {
+                if (!ctx) return;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 193, 0, 0.8)';
+                ctx.fill();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > (canvas?.width || 400)) this.vx *= -1;
+                if (this.y < 0 || this.y > (canvas?.height || 400)) this.vy *= -1;
+            }
+        }
+
+        function init() {
+            resizeCanvas();
+            particles = [];
+            const area = (canvas?.width || 400) * (canvas?.height || 400);
+            const numParticles = Math.max(15, Math.floor(area / 5000));
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+            initialized = true;
+        }
+
+        function animate() {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 193, 0, ${0.4 - dist / 300})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Start immediately when DOM is ready
+        if (canvas && ctx) {
+            init();
+            animate();
+        }
+
+        // Hero canvas animation - Golden theme
+        const heroCanvas = document.getElementById('heroCanvas');
+        const heroCtx = heroCanvas ? heroCanvas.getContext('2d') : null;
+        let heroParticles = [];
+        let heroAnimationId;
+
+        function resizeHeroCanvas() {
+            if (!heroCanvas || !heroCanvas.parentElement) return;
+            const rect = heroCanvas.parentElement.getBoundingClientRect();
+            heroCanvas.width = rect.width;
+            heroCanvas.height = rect.height;
+        }
+
+        class HeroParticle {
+            constructor() {
+                this.x = Math.random() * (heroCanvas?.width || 800);
+                this.y = Math.random() * (heroCanvas?.height || 600);
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 5 + 4;
+            }
+
+            draw() {
+                if (!heroCtx) return;
+                heroCtx.beginPath();
+                heroCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                heroCtx.fillStyle = 'rgba(255, 193, 0, 0.6)';
+                heroCtx.fill();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > (heroCanvas?.width || 800)) this.vx *= -1;
+                if (this.y < 0 || this.y > (heroCanvas?.height || 600)) this.vy *= -1;
+            }
+        }
+
+        function initHero() {
+            resizeHeroCanvas();
+            heroParticles = [];
+            const area = (heroCanvas?.width || 800) * (heroCanvas?.height || 600);
+            const num = Math.max(20, Math.floor(area / 6000));
+            for (let i = 0; i < num; i++) {
+                heroParticles.push(new HeroParticle());
+            }
+        }
+
+        function animateHero() {
+            if (!heroCtx || !heroCanvas) return;
+            heroCtx.clearRect(0, 0, heroCanvas.width, heroCanvas.height);
+
+            for (let i = 0; i < heroParticles.length; i++) {
+                for (let j = i + 1; j < heroParticles.length; j++) {
+                    const dx = heroParticles[i].x - heroParticles[j].x;
+                    const dy = heroParticles[i].y - heroParticles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 100) {
+                        heroCtx.beginPath();
+                        heroCtx.moveTo(heroParticles[i].x, heroParticles[i].y);
+                        heroCtx.lineTo(heroParticles[j].x, heroParticles[j].y);
+                        heroCtx.strokeStyle = `rgba(255, 193, 0, ${0.6 - dist / 400})`;
+                        heroCtx.lineWidth = 1.2;
+                        heroCtx.stroke();
+                    }
+                }
+            }
+
+            heroParticles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            heroAnimationId = requestAnimationFrame(animateHero);
+        }
+
+        window.addEventListener('resize', resizeHeroCanvas);
+
+        if (heroCanvas && heroCtx) {
+            initHero();
+            animateHero();
+        }
+
+        // Modal functionality
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        function openModal(plan) {
+            const modal = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            const title = document.getElementById('modalPlanTitle');
+            
+            let services = '';
+            
+            if (plan === 'starter') {
+                title.textContent = 'Plan Starter — Detalles';
+                services = `
+                    <div class="service-item">
+                        <h4><span>🤖</span> Agente con habilidades esenciales</h4>
+                        <p>Tu agente puede leer, escribir, analizar documentos y conversar en lenguaje natural. Entiende contexto y responde de manera inteligente.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>📊</span> CRM básico + Dashboard</h4>
+                        <p>Sistema para llevar registro de tus clientes, ventas y métricas fundamentales. Interfaz simple para ver el desempeño de tu negocio.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>💬</span> Integración WhatsApp + Calendario</h4>
+                        <p>Tu agente atiende clientes por WhatsApp automáticamente y se sincroniza con tu calendario para agendar citas sin conflictos.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>📦</span> Catálogo de productos/servicios</h4>
+                        <p>Configuramos tu catálogo en el agente para que pueda cotizar, recomendar y vender según lo que ofreces.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>💰</span> Crear cotizaciones automáticas</h4>
+                        <p>El agente genera cotizaciones profesionales basadas en tu catálogo y las envía al cliente por WhatsApp o email.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🔔</span> Recordatorios (tú y clientes)</h4>
+                        <p>Notificaciones automáticas para ti (tareas pendientes) y para tus clientes (citas, pagos, seguimientos).</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>📖</span> Guía de optimización (manual)</h4>
+                        <p>Documento con mejores prácticas para que saques el máximo provecho a tu agente y aumentes tus ventas.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🎬</span> Videoclases de uso</h4>
+                        <p>Videos paso a paso para que aprendas a usar todas las funcionalidades del agente y del dashboard.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🎓</span> Capacitación inicial</h4>
+                        <p>Sesión en vivo donde te enseñamos a usar tu agente y respondemos todas tus dudas.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>👤</span> 1 usuario</h4>
+                        <p>Acceso para 1 usuario (tú) con permisos de administrador. Ideal para emprendedores individuales.</p>
+                    </div>
+                `;
+            } else if (plan === 'profesional') {
+                title.textContent = 'Plan Profesional — Detalles';
+                services = `
+                    <div class="service-item">
+                        <h4><span>✓</span> Todo lo de Starter</h4>
+                        <p>Incluye todas las funcionalidades del plan Starter.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>📈</span> Pipeline de cotizaciones visual</h4>
+                        <p>Visualiza cada oportunidad de venta en etapas: lead nuevo, cotización enviada, negociación, cerrado. Kanban visual para seguir tu embudo.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🔗</span> Integraciones externas (CRM, Email, SMS)</h4>
+                        <p>Conecta tu agente con HubSpot, Pipedrive, Gmail, Outlook, Mailchimp y más. Sincroniza contactos y automatiza flujos entre sistemas.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🔄</span> Migración de datos incluida</h4>
+                        <p>Transferimos todos tus datos desde sistemas existentes (Excel, CRM anterior, Bases de datos) sin costo extra. Tu información lista desde el día uno.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>⚡</span> Automatizaciones (follow-ups, secuencias)</h4>
+                        <p>El agente envía seguimientos automáticos cuando un lead no contesta. Secuencias de nurture para nutrir prospectos sin intervención tuya.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>📉</span> Reportes avanzados de ventas</h4>
+                        <p>Dashboards con métricas: tasa de conversión, ticket promedio, tiempo de cierre, ventas por período. Análisis profundo para tomar mejores decisiones.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>👥</span> 3 usuarios</h4>
+                        <p>Acceso para 3 usuarios con roles configurables (admin, vendedor, viewer). Ideal para equipos pequeños de ventas.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🎓</span> Guía + Videoclases + Capacitación</h4>
+                        <p>Acceso completo a materiales de aprendizaje y sesiones de capacitación para todo tu equipo.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🔝</span> Prioridad en soporte</h4>
+                        <p>Tu mensaje tiene prioridad en nuestra cola de soporte. Tiempo de respuesta garantizado menor a 24h.</p>
+                    </div>
+                `;
+            } else if (plan === 'enterprise') {
+                title.textContent = 'Plan Enterprise — Detalles';
+                services = `
+                    <div class="service-item">
+                        <h4><span>✓</span> Todo lo de Profesional</h4>
+                        <p>Incluye todas las funcionalidades del plan Profesional.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🤖🤖</span> Multiagentes especializados</h4>
+                        <p> múltiples agentes trabajando juntos: uno para ventas, otro para soporte, otro para operaciones. Cada uno especializado en su función y coordinado.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🎨</span> White-label (tu marca)</h4>
+                        <p>El agente y dashboard llevan LA MARCA de tu empresa. Tus clientes nem know que es tuyo, no de Nativa. Dominio personalizado incluido.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🔄</span> Migración de datos incluida</h4>
+                        <p>Transferimos todos tus datos desde sistemas existentes (Excel, CRM anterior, Bases de datos) sin costo extra. Tu información lista desde el día uno.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🛠️</span> Desarrollo de habilidades custom</h4>
+                        <p>Creamos habilidades específicas para tus procesos de negocio. Tu agente aprende a hacer exactamente lo que tu empresa necesita.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🚀</span> Acceso prioritario a nuevas funciones</h4>
+                        <p>Últimas actualizaciones y features antes que nadie. Tu empresa siempre va un paso adelante con las nuevas capacidades de IA.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>∞</span> Usuarios ilimitados</h4>
+                        <p>Todos los colaboradores de tu empresa tienen acceso. Sin límites de usuarios.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🏢</span> Dashboards multi-sucursal</h4>
+                        <p>Consolida métricas de múltiples sucursales o ubicaciones en un solo dashboard. Vista gerencial completa.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🛡️</span> Soporte dedicado + SLA</h4>
+                        <p>Gerente de cuenta dedicado, soporte优先级, y SLA con uptime garantizado. Si algo falla, se resuelve rápido.</p>
+                    </div>
+                    <div class="service-item">
+                        <h4><span>🏠</span> Capacitación in-site</h4>
+                        <p>Sesiones de capacitación presencial o virtual dedicada. Adaptamos el entrenamiento a tus procesos.</p>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = services;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalPlanTitle">Plan — Detalles</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
