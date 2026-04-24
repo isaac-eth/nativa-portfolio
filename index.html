@@ -1133,31 +1133,82 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 28px;
+            padding: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .faq-item.open {
+            border-color: var(--accent);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px;
+            cursor: pointer;
+            gap: 16px;
+        }
+
+        .faq-question h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            flex: 1;
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,193,0,0.1);
+            border: 1px solid rgba(255,193,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--accent);
+            flex-shrink: 0;
             transition: all 0.3s ease;
         }
 
-        .faq-item:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
+        .faq-item.open .faq-icon {
+            background: var(--accent);
+            color: #000;
+            transform: rotate(45deg);
         }
 
-        .faq-item h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 12px;
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            padding: 0 28px;
         }
 
-        .faq-item p {
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding: 0 28px 24px;
+        }
+
+        .faq-answer p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
+            font-size: 0.92rem;
+            line-height: 1.7;
         }
 
         @media (max-width: 768px) {
             .faq-grid {
                 grid-template-columns: 1fr;
+            }
+            .faq-question {
+                padding: 20px;
+            }
+            .faq-answer {
+                padding: 0 20px;
+            }
+            .faq-item.open .faq-answer {
+                padding: 0 20px 20px;
             }
         }
 
@@ -2169,36 +2220,76 @@
             
             <div class="faq-grid">
                 <div class="faq-item">
-                    <h3>¿Qué es un agente de IA?</h3>
-                    <p>Es un asistente digital autónomo que trabaja 24/7 para tu negocio. Puede leer documentos, conversar por WhatsApp, agendar citas, crear cotizaciones, hacer seguimiento a clientes y mucho más. Es como tener un empleado virtual que nunca descansa.</p>
+                    <div class="faq-question">
+                        <h3>¿Qué es un agente de IA?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Es un asistente digital autónomo que trabaja 24/7 para tu negocio. Puede leer documentos, conversar por WhatsApp, agendar citas, crear cotizaciones, hacer seguimiento a clientes y mucho más. Es como tener un empleado virtual que nunca descansa.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿Necesito conocimientos técnicos?</h3>
-                    <p>No. Tu agente viene listo para usar. Te proporcionamos la guía, videoclases y capacitación inicial para que puedas operarlo sin conocimientos técnicos. Si puedes usar WhatsApp, puedes usar tu agente.</p>
+                    <div class="faq-question">
+                        <h3>¿Necesito conocimientos técnicos?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No. Tu agente viene listo para usar. Te proporcionamos la guía, videoclases y capacitación inicial para que puedas operarlo sin conocimientos técnicos. Si puedes usar WhatsApp, puedes usar tu agente.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿Cuánto tiempo toma implementar un agente?</h3>
-                    <p>El proceso estándar es de 10 días hábiles. Durante ese tiempo configuramos tu catálogo de productos/servicios, entrenamos al agente con tu información, configuramos integraciones y te capacitamos para que estés listo desde el día uno.</p>
+                    <div class="faq-question">
+                        <h3>¿Cuánto tiempo toma implementar un agente?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>El proceso estándar es de 10 días hábiles. Durante ese tiempo configuramos tu catálogo de productos/servicios, entrenamos al agente con tu información, configuramos integraciones y te capacitamos para que estés listo desde el día uno.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿Qué incluye la implementación?</h3>
-                    <p>La implementación incluye: configuración del agente con tu información, carga de tu catálogo de productos/servicios, integraciones básicas (WhatsApp, Calendario), capacitación inicial y acceso a la plataforma. Todo listo para que empieces a vender.</p>
+                    <div class="faq-question">
+                        <h3>¿Qué incluye la implementación?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>La implementación incluye: configuración del agente con tu información, carga de tu catálogo de productos/servicios, integraciones básicas (WhatsApp, Calendario), capacitación inicial y acceso a la plataforma. Todo listo para que empieces a vender.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿Puedo cambiar de plan después?</h3>
-                    <p>Sí. Puedes hacer upgrade a un plan superior en cualquier momento. El proceso es sencillo y no pierdes ninguna configuración. Solo contactanos y te ayudamos con la transición.</p>
+                    <div class="faq-question">
+                        <h3>¿Puedo cambiar de plan después?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí. Puedes hacer upgrade a un plan superior en cualquier momento. El proceso es sencillo y no pierdes ninguna configuración. Solo contactanos y te ayudamos con la transición.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿Qué pasa si no estoy satisfecho?</h3>
-                    <p>Durante los primeros 30 días tienes garantía de satisfacción. Si el agente no cumple tus expectativas, trabajaremos para ajustarlo hasta que esté correcto. Tu satisfacción es nuestra prioridad.</p>
+                    <div class="faq-question">
+                        <h3>¿Qué pasa si no estoy satisfecho?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Durante los primeros 30 días tienes garantía de satisfacción. Si el agente no cumple tus expectativas, trabajaremos para ajustarlo hasta que esté correcto. Tu satisfacción es nuestra prioridad.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿El precio es mensual o anual?</h3>
-                    <p>Los precios mostrados son mensuales. Sin embargo, si prefieres pagar annually obtienes 2 meses gratis. Para Enterprise, tenemos descuentos por volumen que varían según el proyecto.</p>
+                    <div class="faq-question">
+                        <h3>¿El precio es mensual o anual?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Los precios mostrados son mensuales. Sin embargo, si prefieres pagar annually obtienes 2 meses gratis. Para Enterprise, tenemos descuentos por volumen que varían según el proyecto.</p>
+                    </div>
                 </div>
                 <div class="faq-item">
-                    <h3>¿Puedo integrar mi CRM actual?</h3>
-                    <p>En el plan Profesional y superiores puedes integrar tu CRM actual (HubSpot, Pipedrive, Salesforce) así como Gmail, Outlook, Mailchimp y más. En Enterprise también desarrollamos integraciones custom.</p>
+                    <div class="faq-question">
+                        <h3>¿Puedo integrar mi CRM actual?</h3>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>En el plan Profesional y superiores puedes integrar tu CRM actual (HubSpot, Pipedrive, Salesforce) así como Gmail, Outlook, Mailchimp y más. En Enterprise también desarrollamos integraciones custom.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2333,6 +2424,17 @@
             el.classList.add('reveal');
             el.style.transitionDelay = `${index * 0.05}s`;
             observer.observe(el);
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                // Toggle current
+                if (!isOpen) item.classList.add('open');
+            });
         });
 
     </script>
