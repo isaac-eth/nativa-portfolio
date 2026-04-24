@@ -1555,6 +1555,7 @@
             <ul class="nav-links">
                 <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#agentes">Agentes IA</a></li>
+                <li><a href="#simulador">Simulador</a></li>
                 <li><a href="#plataformas">Plataformas</a></li>
                 <li><a href="#precios">Precios</a></li>
                 <li><a href="#faq">FAQ</a></li>
@@ -1905,6 +1906,252 @@
                 </a>
             </div>
         </div>
+    </section>
+
+    <!-- AI BUSINESS SIMULATOR -->
+    <section id="simulador" style="
+        position: relative;
+        min-height: 100vh;
+        background: #000;
+        overflow: hidden;
+        padding: 80px 0;
+    ">
+        <!-- Animated background -->
+        <canvas id="simulatorBgCanvas" style="
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        "></canvas>
+        <div style="
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255,193,0,0.08) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 80%, rgba(0,80,255,0.05) 0%, transparent 50%);
+            pointer-events: none; z-index: 0;
+        "></div>
+
+        <div class="container" style="position: relative; z-index: 1;">
+            <!-- Header -->
+            <div style="text-align: center; margin-bottom: 60px;" id="simHeader">
+                <p class="section-label" style="color: var(--accent); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Simulador interactivo</p>
+                <h2 style="
+                    font-size: clamp(1.8rem, 4vw, 3rem);
+                    font-weight: 900;
+                    letter-spacing: -0.03em;
+                    background: linear-gradient(180deg, #fff 0%, #ffe066 30%, #ffc100 50%, #cc9900 70%, #fff 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    filter: brightness(1.15) saturate(1.2);
+                    margin-bottom: 16px;
+                ">"Así se vería tu negocio operando con<br>Inteligencia Artificial"</h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem; max-width: 600px; margin: 0 auto;">Selecciona tu industria y visualiza, en tiempo real, cómo un agente autónomo puede optimizar tus ventas, operación y control.</p>
+            </div>
+
+            <!-- Industry selector -->
+            <div id="industrySelector" style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 16px;
+                max-width: 900px;
+                margin: 0 auto 50px;
+            ">
+                <div class="industry-card selected" data-industry="despacho" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--accent);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Despachos contables</div>
+                </div>
+                <div class="industry-card" data-industry="notaria" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">⚖️</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Notarías / Jurídico</div>
+                </div>
+                <div class="industry-card" data-industry="marketing" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📈</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Agencias de marketing</div>
+                </div>
+                <div class="industry-card" data-industry="clinica" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🩺</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Clínicas / Médicos</div>
+                </div>
+                <div class="industry-card" data-industry="veterinaria" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🐾</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Veterinarias</div>
+                </div>
+                <div class="industry-card" data-industry="seguros" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🛡️</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Seguros</div>
+                </div>
+                <div class="industry-card" data-industry="inmobiliaria" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 24px 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🏠</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Inmobiliarias</div>
+                </div>
+            </div>
+
+            <!-- Dynamic content area -->
+            <div id="dynamicContent" style="
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: 24px;
+                overflow: hidden;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.5s ease;
+            ">
+                <!-- Loading state -->
+                <div id="simLoader" style="
+                    display: none;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 80px 40px;
+                    gap: 20px;
+                ">
+                    <div style="
+                        font-size: 1.1rem;
+                        color: var(--accent);
+                        font-weight: 600;
+                    ">Configurando tu operación con IA…</div>
+                    <div style="
+                        width: 100%;
+                        max-width: 300px;
+                        height: 4px;
+                        background: var(--bg-card);
+                        border-radius: 4px;
+                        overflow: hidden;
+                    ">
+                        <div id="progressBar" style="
+                            height: 100%;
+                            background: linear-gradient(90deg, var(--accent), var(--gold-light));
+                            width: 0%;
+                            transition: width 0.3s ease;
+                            border-radius: 4px;
+                        "></div>
+                    </div>
+                </div>
+
+                <!-- Industry content -->
+                <div id="industryContent" style="display: none;"></div>
+            </div>
+
+            <!-- CTA -->
+            <div id="simCta" style="
+                display: none;
+                text-align: center;
+                margin-top: 40px;
+                padding: 40px;
+                background: linear-gradient(135deg, rgba(255,193,0,0.08) 0%, transparent 100%);
+                border: 1px solid rgba(255,193,0,0.2);
+                border-radius: 20px;
+            ">
+                <p style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Esto es solo una simulación. Podemos implementarlo en tu negocio.</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Agenda una sesión sin compromiso y te mostramos cómo se vería tu agente.</p>
+                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:contacto@nativa.mx?subject=Quiero%20mi%20diagnóstico%20personalizado" class="btn-primary" style="
+                        display: inline-flex; align-items: center; gap: 8px;
+                        background: var(--accent); color: #000; padding: 14px 28px;
+                        border-radius: 10px; text-decoration: none; font-weight: 600;
+                    ">Quiero mi diagnóstico personalizado</a>
+                    <a href="mailto:contacto@nativa.mx?subject=Cómo%20funcionaría%20en%20mi%20empresa" class="btn-secondary" style="
+                        display: inline-flex; align-items: center; gap: 8px;
+                        background: var(--bg-card); color: var(--text-primary);
+                        padding: 14px 28px; border-radius: 10px; text-decoration: none;
+                        font-weight: 600; border: 1px solid var(--border);
+                    ">Ver cómo funcionaría en mi empresa</a>
+                </div>
+            </div>
+
+            <!-- Final section -->
+            <div style="
+                text-align: center;
+                margin-top: 80px;
+                padding: 40px;
+            ">
+                <p style="
+                    font-size: 1.3rem;
+                    font-weight: 800;
+                    color: var(--accent);
+                    letter-spacing: -0.02em;
+                    margin-bottom: 8px;
+                ">No es un software. Es una operación inteligente adaptada a tu industria.</p>
+                <p style="color: var(--text-secondary); font-size: 1rem;">Diseñamos, implementamos y optimizamos agentes autónomos que operan contigo.</p>
+            </div>
+        </div>
+
+        <style>
+            .industry-card {
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .industry-card:hover {
+                transform: scale(1.03) translateY(-2px);
+                box-shadow: 0 10px 30px rgba(255,193,0,0.15);
+                border-color: rgba(255,193,0,0.5) !important;
+            }
+            .industry-card.selected {
+                border-color: var(--accent) !important;
+                background: rgba(255,193,0,0.08) !important;
+                box-shadow: 0 0 20px rgba(255,193,0,0.2);
+            }
+        </style>
     </section>
 
     <!-- FOOTER -->
@@ -2356,18 +2603,487 @@
         });
     </script>
 
-    <!-- MODAL -->
-    <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalPlanTitle">Plan — Detalles</h3>
-                <button class="modal-close" onclick="closeModal()">×</button>
+    <!-- SIMULATOR SCRIPT -->
+    <script>
+    // ─── INDUSTRY DATA ───
+    const industryData = {
+        despacho: {
+            title: "Tu despacho operando con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando clientes, cumplimiento fiscal y operación interna en tiempo real.",
+            image: "📊",
+            agent_work: [
+                "Recibe mensajes de clientes automáticamente",
+                "Responde dudas fiscales frecuentes 24/7",
+                "Detecta pendientes fiscales por cliente",
+                "Genera recordatorios inteligentes",
+                "Clasifica ingresos y gastos automáticamente",
+                "Prepara reportes mensuales preliminares"
+            ],
+            operation_changes: [
+                "Eliminación de tareas repetitivas",
+                "Reducción de errores operativos",
+                "Mayor capacidad sin contratar más personal",
+                "Mejora en tiempos de respuesta",
+                "Organización total de clientes"
+            ],
+            results: ["+40% eficiencia operativa", "-60% tiempo en tareas administrativas", "+30% capacidad de atención", "Disponibilidad 24/7"],
+            chat_name: "IA Fiscal",
+            chat_avatar: "🤖",
+            chat_client: "Cliente:",
+            chat_client_msg: "¿Ya está mi declaración?",
+            chat_ia: "IA Fiscal:",
+            chat_ia_msg: "Sí, ya fue presentada. Tu línea de pago vence el 17 de abril. ¿Deseas que te la envíe?"
+        },
+        notaria: {
+            title: "Tu notaría operando con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando expedientes, documentos y seguimiento de trámites en tiempo real.",
+            image: "⚖️",
+            agent_work: [
+                "Control de expedientes digitales",
+                "Automatización de redacción de documentos",
+                "Atención inicial a clientes 24/7",
+                "Seguimiento de trámites y plazos",
+                "Recordatorios de vencimientos",
+                "Clasificación de escrituras y actos jurídicos"
+            ],
+            operation_changes: [
+                "Reducción de tiempos de gestión",
+                "Eliminación de errores documentales",
+                "Mejor control de plazos legales",
+                "Mayor capacidad de atención",
+                "Organización total de expedientes"
+            ],
+            results: ["+50% eficiencia", "-70% errores", "+40% capacidad", "Disponibilidad 24/7"],
+            chat_name: "IA Legal",
+            chat_avatar: "⚖️",
+            chat_client: "Cliente:",
+            chat_client_msg: "¿En qué estado está mi escritura?",
+            chat_ia: "IA Legal:",
+            chat_ia_msg: "Tu trámite pasó a firma. Te notificaremos cuando esté listo para recoger. ¿Necesitas algo más?"
+        },
+        marketing: {
+            title: "Tu agencia operando con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando leads, seguimientos y propuestas de manera autónoma.",
+            image: "📈",
+            agent_work: [
+                "Captación y cualificación de leads",
+                "Envío de propuestas automáticas",
+                "Seguimiento de campañas y resultados",
+                "Agendado de reuniones sin intervención",
+                "Reportes de rendimiento en tiempo real",
+                "Gestión de redes sociales automatizada"
+            ],
+            operation_changes: [
+                "Multiplicación de leads captados",
+                "Seguimientos sin olvidos",
+                "Propuestas en minutos",
+                "Escalado sin contratar más personas",
+                "Análisis de campañas en tiempo real"
+            ],
+            results: ["+200% leads", "-80% tiempo admin", "+60% cierres", "Análisis en tiempo real"],
+            chat_name: "IA Marketing",
+            chat_avatar: "📈",
+            chat_client: "Cliente:",
+            chat_client_msg: "Vi el case de éxito, me interesa una propuesta",
+            chat_ia: "IA Marketing:",
+            chat_ia_msg: "Perfecto. Detecté que eres un lead calificado. ¿Quieres que envíe propuesta automática con nuestros planes?"
+        },
+        clinica: {
+            title: "Tu clínica operando con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando citas, pacientes y seguimiento médico en tiempo real.",
+            image: "🩺",
+            agent_work: [
+                "Agenda y confirma citas automáticamente",
+                "Envío de recordatorios deMedicamentos y tratamientos",
+                "Seguimiento post-consulta",
+                "Clasificación de síntomas",
+                "Gestión de estudios y resultados",
+                "Coordinación de laboratorio"
+            ],
+            operation_changes: [
+                "Reducción de citas perdidas",
+                "Mejor organización de pacientes",
+                "Seguimiento continuo sin staff",
+                "Tiempos de espera reducidos",
+                "Satisfacción del paciente"
+            ],
+            results: ["-50% citas perdidas", "+40% pacientes", "+30% eficiencia", "Disponibilidad 24/7"],
+            chat_name: "IA Clínica",
+            chat_avatar: "🩺",
+            chat_client: "Paciente:",
+            chat_client_msg: "No pude ir ayer, ¿pueden reagendar?",
+            chat_ia: "IA Clínica:",
+            chat_ia_msg: "Claro. Te ofrezco el lunes 27 a las 10:00 AM. ¿Te funciona o prefieres otro horario?"
+        },
+        veterinaria: {
+            title: "Tu veterinaria operando con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando citas, historial de mascotas y seguimiento de tratamientos.",
+            image: "🐾",
+            agent_work: [
+                "Agenda citas y confirma recordatorios",
+                "Gestión de historial de mascotas",
+                "Seguimiento de vacunas y desparasitaciones",
+                "Notificaciones de productos por agotar",
+                "Atención fuera de horario",
+                "Coordinación con laboratorio"
+            ],
+            operation_changes: [
+                "-40% citas perdidas",
+                "Control total de vacunas",
+                "Recordatorios automáticos",
+                "Atención 24/7",
+                "Mejor organización"
+            ],
+            results: ["-40% citas perdidas", "+60% eficiencia", "+50% clientes", "Disponibilidad 24/7"],
+            chat_name: "IA Veterinaria",
+            chat_avatar: "🐾",
+            chat_client: "Cliente:",
+            chat_client_msg: "¿Cuándo le toca la siguiente vacuna a Luna?",
+            chat_ia: "IA Veterinaria:",
+            chat_ia_msg: "Luna tiene疫苗 programada para el 5 de mayo. ¿Quieres que te envíe un recordatorio un día antes?"
+        },
+        seguros: {
+            title: "Tu operación de seguros con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando renovaciones, prospectos y atención a asegurados.",
+            image: "🛡️",
+            agent_work: [
+                "Automatización de renovaciones",
+                "Captación y cualificación de prospectos",
+                "Seguimiento de trámites y composiciones",
+                "Atención a asegurados 24/7",
+                "Generación de cotizaciones",
+                "Recordatorios de pagos"
+            ],
+            operation_changes: [
+                "Renovaciones automáticas",
+                "Prospectos cualificados",
+                "Seguimiento sin olvidos",
+                "+60% eficiencia",
+                "Mejor retención"
+            ],
+            results: ["+80% renovaciones", "-60% costos", "+40% prospectos", "Disponibilidad 24/7"],
+            chat_name: "IA Seguros",
+            chat_avatar: "🛡️",
+            chat_client: "Cliente:",
+            chat_client_msg: "¿Mi póliza está vigente?",
+            chat_ia: "IA Seguros:",
+            chat_ia_msg: "Sí, tu póliza está vigente hasta el 15/ago/2026. ¿Te interesa renovarla con anticipación o tienes alguna duda?"
+        },
+        inmobiliaria: {
+            title: "Tu inmobiliaria operando con inteligencia automatizada",
+            subtitle: "Un agente IA gestionando leads, visitas y seguimiento de propiedades.",
+            image: "🏠",
+            agent_work: [
+                "Captación y cualificación de leads",
+                "Agenda de visitas a propiedades",
+                "Seguimiento de prospectos",
+                "Envío de propiedades por criterio",
+                "Coordinación con agentes",
+                "Reportes de mercado"
+            ],
+            operation_changes: [
+                "2x más leads cualificados",
+                "Visitas agendadas sin errores",
+                "Seguimiento automático",
+                "Propiedades mejor posicionadas",
+                "Análisis de mercado"
+            ],
+            results: ["+100% leads", "+50% cierres", "-70% trabajo admin", "Disponibilidad 24/7"],
+            chat_name: "IA Inmobiliaria",
+            chat_avatar: "🏠",
+            chat_client: "Cliente:",
+            chat_client_msg: "Busco casa en San Luis Potosí, 2 millones presupuesto",
+            chat_ia: "IA Inmobiliaria:",
+            chat_ia_msg: "Tengo 3 propiedades que matchean. ¿Quieres que agende visitas para este fin de semana?"
+        }
+    };
+
+    // ─── SIMULATOR LOGIC ───
+    const dynamicContent = document.getElementById('dynamicContent');
+    const industryContent = document.getElementById('industryContent');
+    const simLoader = document.getElementById('simLoader');
+    const progressBar = document.getElementById('progressBar');
+    const simCta = document.getElementById('simCta');
+
+    function renderIndustry(id) {
+        const d = industryData[id];
+        if (!d) return;
+
+        industryContent.innerHTML = `
+            <div style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+            ">
+                <!-- Left: Visual -->
+                <div style="
+                    background: var(--bg-card);
+                    padding: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 20px;
+                ">
+                    <div style="
+                        width: 120px; height: 120px;
+                        background: rgba(255,193,0,0.1);
+                        border-radius: 24px;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 4rem;
+                        border: 1px solid rgba(255,193,0,0.3);
+                    ">${d.image}</div>
+                    <div style="
+                        background: #000;
+                        border: 1px solid var(--border);
+                        border-radius: 16px;
+                        padding: 20px;
+                        width: 100%;
+                        max-width: 300px;
+                        position: relative;
+                    ">
+                        <div style="
+                            position: absolute; top: -14px; left: 16px;
+                            background: var(--accent); color: #000;
+                            font-size: 0.7rem; font-weight: 700;
+                            padding: 4px 10px; border-radius: 100px;
+                        ">${d.chat_name}</div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+                            <div style="
+                                background: var(--bg-card-hover);
+                                border-radius: 12px; border-top-left-radius: 4px;
+                                padding: 10px 14px; font-size: 0.85rem;
+                                color: var(--text-primary);
+                            "><strong style="color: var(--accent)">${d.chat_client}:</strong> ${d.chat_client_msg}</div>
+                            <div style="
+                                background: rgba(255,193,0,0.12);
+                                border-radius: 12px; border-top-left-radius: 4px;
+                                padding: 10px 14px; font-size: 0.85rem;
+                                color: var(--text-primary);
+                            "><strong style="color: var(--accent)">${d.chat_ia}:</strong> ${d.chat_ia_msg}</div>
+                        </div>
+                    </div>
+                    <button onclick="animateChat(this)" style="
+                        background: transparent;
+                        border: 1px solid var(--accent);
+                        color: var(--accent);
+                        padding: 8px 20px;
+                        border-radius: 8px;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Ver más interacciones</button>
+                </div>
+
+                <!-- Right: Content -->
+                <div style="padding: 40px;">
+                    <h3 style="
+                        font-size: 1.5rem; font-weight: 800;
+                        color: var(--text-primary);
+                        margin-bottom: 8px;
+                    ">${d.title}</h3>
+                    <p style="
+                        color: var(--text-secondary); font-size: 0.95rem;
+                        margin-bottom: 28px; line-height: 1.6;
+                    ">${d.subtitle}</p>
+
+                    <div style="margin-bottom: 28px;">
+                        <h4 style="
+                            font-size: 0.75rem; font-weight: 700;
+                            text-transform: uppercase; letter-spacing: 0.1em;
+                            color: var(--accent); margin-bottom: 14px;
+                        ">Así trabaja tu agente</h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${d.agent_work.map(item => `
+                                <div style="
+                                    display: flex; align-items: center; gap: 10px;
+                                    font-size: 0.88rem; color: var(--text-secondary);
+                                ">
+                                    <div style="
+                                        width: 20px; height: 20px;
+                                        background: rgba(255,193,0,0.15);
+                                        border-radius: 6px;
+                                        display: flex; align-items: center; justify-content: center;
+                                        font-size: 0.65rem; color: var(--accent); flex-shrink: 0;
+                                    ">✓</div>
+                                    ${item}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 28px;">
+                        <h4 style="
+                            font-size: 0.75rem; font-weight: 700;
+                            text-transform: uppercase; letter-spacing: 0.1em;
+                            color: var(--accent); margin-bottom: 14px;
+                        ">Lo que cambia en tu operación</h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${d.operation_changes.map(item => `
+                                <div style="
+                                    display: flex; align-items: center; gap: 10px;
+                                    font-size: 0.88rem; color: var(--text-secondary);
+                                ">
+                                    <div style="
+                                        width: 20px; height: 20px;
+                                        background: rgba(255,193,0,0.15);
+                                        border-radius: 6px;
+                                        display: flex; align-items: center; justify-content: center;
+                                        font-size: 0.65rem; color: var(--accent); flex-shrink: 0;
+                                    ">→</div>
+                                    ${item}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="
+                            font-size: 0.75rem; font-weight: 700;
+                            text-transform: uppercase; letter-spacing: 0.1em;
+                            color: var(--accent); margin-bottom: 14px;
+                        ">Resultados estimados</h4>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            ${d.results.map(r => `
+                                <div style="
+                                    background: rgba(255,193,0,0.1);
+                                    border: 1px solid rgba(255,193,0,0.3);
+                                    border-radius: 8px;
+                                    padding: 8px 14px;
+                                    font-size: 0.8rem; font-weight: 700;
+                                    color: var(--accent);
+                                ">${r}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" id="modalContent">
-                <!-- Dynamic content -->
-            </div>
-        </div>
-    </div>
+        `;
+    }
+
+    function animateChat(btn) {
+        btn.textContent = '✨ Más inteligencia cada día';
+        btn.disabled = true;
+        btn.style.background = 'rgba(255,193,0,0.15)';
+    }
+
+    function selectIndustry(id) {
+        // Update cards
+        document.querySelectorAll('.industry-card').forEach(card => {
+            card.classList.remove('selected');
+            card.style.borderColor = 'var(--border)';
+        });
+        const selected = document.querySelector(`[data-industry="${id}"]`);
+        if (selected) {
+            selected.classList.add('selected');
+            selected.style.borderColor = 'var(--accent)';
+        }
+
+        // Show loader with progress
+        industryContent.style.display = 'none';
+        simLoader.style.display = 'flex';
+        dynamicContent.style.opacity = '1';
+        dynamicContent.style.transform = 'translateY(0)';
+        simCta.style.display = 'none';
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15 + 5;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    renderIndustry(id);
+                    simLoader.style.display = 'none';
+                    industryContent.style.display = 'block';
+                    simCta.style.display = 'block';
+                }, 200);
+            }
+            progressBar.style.width = progress + '%';
+        }, 100);
+    }
+
+    // ─── SIMULATOR BG ANIMATION ───
+    const bgCanvas = document.getElementById('simulatorBgCanvas');
+    const bgCtx = bgCanvas ? bgCanvas.getContext('2d') : null;
+    let bgParticles = [];
+    let bgAnimId;
+
+    function resizeBgCanvas() {
+        if (!bgCanvas) return;
+        bgCanvas.width = bgCanvas.offsetWidth || window.innerWidth;
+        bgCanvas.height = bgCanvas.offsetHeight || 600;
+    }
+
+    class BgParticle {
+        constructor() {
+            this.x = Math.random() * (bgCanvas?.width || 800);
+            this.y = Math.random() * (bgCanvas?.height || 600);
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.alpha = Math.random() * 0.3 + 0.1;
+        }
+        draw() {
+            if (!bgCtx) return;
+            bgCtx.beginPath();
+            bgCtx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+            bgCtx.fillStyle = `rgba(255,193,0,${this.alpha})`;
+            bgCtx.fill();
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > (bgCanvas?.width || 800)) this.vx *= -1;
+            if (this.y < 0 || this.y > (bgCanvas?.height || 600)) this.vy *= -1;
+        }
+    }
+
+    function initBg() {
+        resizeBgCanvas();
+        bgParticles = [];
+        for (let i = 0; i < 60; i++) bgParticles.push(new BgParticle());
+    }
+
+    function animateBg() {
+        if (!bgCtx || !bgCanvas) return;
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        for (let i = 0; i < bgParticles.length; i++) {
+            for (let j = i + 1; j < bgParticles.length; j++) {
+                const dx = bgParticles[i].x - bgParticles[j].x;
+                const dy = bgParticles[i].y - bgParticles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 100) {
+                    bgCtx.beginPath();
+                    bgCtx.moveTo(bgParticles[i].x, bgParticles[i].y);
+                    bgCtx.lineTo(bgParticles[j].x, bgParticles[j].y);
+                    bgCtx.strokeStyle = `rgba(255,193,0,${0.15 - dist / 800})`;
+                    bgCtx.lineWidth = 0.5;
+                    bgCtx.stroke();
+                }
+            }
+            bgParticles[i].update();
+            bgParticles[i].draw();
+        }
+        bgAnimId = requestAnimationFrame(animateBg);
+    }
+
+    if (bgCanvas && bgCtx) {
+        initBg();
+        animateBg();
+        window.addEventListener('resize', initBg);
+    }
+
+    // ─── EVENT LISTENERS ───
+    document.querySelectorAll('.industry-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const industry = card.dataset.industry;
+            selectIndustry(industry);
+        });
+    });
+
+    // Auto-select despacho on load
+    setTimeout(() => selectIndustry('despacho'), 500);
+    </script>
 
 </body>
 </html>
