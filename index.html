@@ -1952,99 +1952,118 @@
 
             <!-- Industry selector -->
             <div id="industrySelector" style="
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                gap: 16px;
-                max-width: 900px;
-                margin: 0 auto 50px;
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 12px;
+                max-width: 100%;
+                padding-bottom: 8px;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                justify-content: flex-start;
+                padding-left: 4px;
+                padding-right: 4px;
             ">
                 <div class="industry-card selected" data-industry="despacho" style="
                     background: var(--bg-card);
                     border: 1px solid var(--accent);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
-                    position: relative;
-                    overflow: hidden;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Despachos contables</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">📊</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Despachos contables</div>
                 </div>
                 <div class="industry-card" data-industry="notaria" style="
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">⚖️</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Notarías / Jurídico</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">⚖️</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Notarías / Jurídico</div>
                 </div>
                 <div class="industry-card" data-industry="marketing" style="
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">📈</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Agencias de marketing</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">📈</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Agencias de marketing</div>
                 </div>
                 <div class="industry-card" data-industry="clinica" style="
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🩺</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Clínicas / Médicos</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🩺</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Clínicas / Médicos</div>
                 </div>
                 <div class="industry-card" data-industry="veterinaria" style="
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🐾</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Veterinarias</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🐾</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Veterinarias</div>
                 </div>
                 <div class="industry-card" data-industry="seguros" style="
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🛡️</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Seguros</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🛡️</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Seguros</div>
                 </div>
                 <div class="industry-card" data-industry="inmobiliaria" style="
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 24px 16px;
+                    padding: 20px 14px;
                     text-align: center;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    min-width: 130px;
+                    flex-shrink: 0;
                 ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🏠</div>
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Inmobiliarias</div>
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🏠</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">Inmobiliarias</div>
                 </div>
             </div>
+            <style>#industrySelector::-webkit-scrollbar { display: none; }</style>
 
             <!-- Dynamic content area -->
             <div id="dynamicContent" style="
@@ -2104,7 +2123,7 @@
             ">
                 <p style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Esto es solo una simulación. Podemos implementarlo en tu negocio.</p>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Agenda una sesión sin compromiso y te mostramos cómo se vería tu agente.</p>
-                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <div class="cta-btns" style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
                     <a href="mailto:contacto@nativa.mx?subject=Quiero%20mi%20diagnóstico%20personalizado" class="btn-primary" style="
                         display: inline-flex; align-items: center; gap: 8px;
                         background: var(--accent); color: #000; padding: 14px 28px;
@@ -2150,6 +2169,53 @@
                 border-color: var(--accent) !important;
                 background: rgba(255,193,0,0.08) !important;
                 box-shadow: 0 0 20px rgba(255,193,0,0.2);
+            }
+            /* Mobile responsive */
+            @media (max-width: 768px) {
+                #simulador {
+                    padding: 60px 0 !important;
+                }
+                #simHeader h2 {
+                    font-size: 1.5rem !important;
+                    line-height: 1.2 !important;
+                }
+                #simHeader p {
+                    font-size: 0.9rem !important;
+                }
+                #industrySelector {
+                    overflow-x: auto !important;
+                    flex-wrap: nowrap !important;
+                    justify-content: flex-start !important;
+                    padding: 0 4px 8px !important;
+                    gap: 10px !important;
+                }
+                .industry-card {
+                    min-width: 115px !important;
+                    padding: 16px 10px !important;
+                }
+                .sim-split {
+                    grid-template-columns: 1fr !important;
+                }
+                .sim-left {
+                    padding: 24px 16px !important;
+                    border-bottom: 1px solid var(--border) !important;
+                }
+                .sim-right {
+                    padding: 24px 16px !important;
+                }
+                #simCta {
+                    padding: 28px 16px !important;
+                }
+                #simCta .cta-btns {
+                    flex-direction: column !important;
+                    gap: 12px !important;
+                }
+                #simCta .cta-btns a {
+                    width: 100%;
+                    justify-content: center;
+                    font-size: 0.85rem;
+                    padding: 12px 16px !important;
+                }
             }
         </style>
     </section>
@@ -2810,13 +2876,13 @@
         if (!d) return;
 
         industryContent.innerHTML = `
-            <div style="
+            <div class="sim-split" style="
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 0;
             ">
                 <!-- Left: Visual -->
-                <div style="
+                <div class="sim-left" style="
                     background: var(--bg-card);
                     padding: 40px;
                     display: flex;
